@@ -45,7 +45,7 @@ void Cloud::init() {
   cloud.width = PWIDTH;
   cloud.height = PHEIGHT;
   cloud.points.resize(cloud.width * cloud.height);
-  pcl_pub = nh.advertise<sensor_msgs::PointCloud2>("ce30c_output", 1);
+  pcl_pub = nh.advertise<sensor_msgs::PointCloud2>("scan", 1);
   Cloud::camera(150);
 }
 void Cloud::camera(const float camera_f) {
@@ -66,8 +66,8 @@ void Cloud::camera(const float camera_f) {
 void Cloud::point_pose(const unsigned short *range) {
   for (int i = 0; i < cloud.points.size(); i++) {
     if (range[i] > 10) {
-      cloud.points[i].x = pose_x[i] * range[i] / 100.0f;
-      cloud.points[i].y = range[i] / 100.0f;
+      cloud.points[i].x = range[i] / 100.0f;
+      cloud.points[i].y = -pose_x[i] * range[i] / 100.0f;
       cloud.points[i].z = pose_y[i] * range[i] / 100.0f;
     } else {
       cloud.points[i].x = 0;
